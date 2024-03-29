@@ -4,8 +4,7 @@ from django.contrib.auth.models import User
 
 
 def main_view(request):
-    user = User.objects.get(username='marektotoszko')
+    user = User.objects.get(username=request.user)
     chatrooms = ChatRoom.objects.filter(participants=user)
-    context = {"user": user,
-               "chatrooms": chatrooms}
+    context = {"user": user, "chatrooms": chatrooms}
     return render(request, "main.html", context=context)

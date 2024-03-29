@@ -1,0 +1,1 @@
+# Initializaotr for model tests

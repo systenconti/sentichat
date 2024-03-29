@@ -1,0 +1,1 @@
+# Initializator of tests package

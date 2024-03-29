@@ -86,7 +86,10 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': env('DATABASE_PASSWORD'),
         'HOST': '127.0.0.1',
-        'PORT': '5433',
+        'PORT': '',
+        'TEST': {
+            "NAME": 'test_sentichat_development',
+        }
     }
 }
 

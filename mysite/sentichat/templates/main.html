@@ -17,7 +17,11 @@
                     <div class="d-flex gap-2 w-100 justify-content-between">
                     <div>
                         <h6 class="mb-0">{{ chatroom.name }}</h6>
-                        <p class="mb-0 opacity-75">Some placeholder content in a paragraph.</p>
+                        {% with chatroom.messages.last as message %}
+                            {% if message %}
+                                <p class="mb-0 opacity-75">{{ message.content }}</p>
+                            {% endif %}
+                        {% endwith %}
                     </div>
                     <small class="opacity-50 text-nowrap">now (placeholder)</small>
                     </div>

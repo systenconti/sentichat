@@ -6,10 +6,11 @@ from django.http import Http404
 
 @login_required
 def thread_view(request, chatroom_id):
+    chatrooms = ChatRoom.objects.filter(participants=request.user)
     chatroom = get_object_or_404(ChatRoom, id=chatroom_id)
     if request.user not in chatroom.participants.all():
         raise Http404("You do not have permission to view this chatroom.")
 
-    messages = chatroom.messages.all().order_by('timestamp')
-    context = {'chatroom': chatroom, 'messages': messages}
+    messages = chatroom.messages.all().order_by("timestamp")
+    context = {"chatrooms": chatrooms, "chatroom": chatroom, "messages": messages}
     return render(request, "thread.html", context=context)

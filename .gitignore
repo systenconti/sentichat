@@ -7,3 +7,5 @@ package-lock.json
 mysite/sentichat/static/bootstrap
 .vscode
 .coverage
+.config
+.flake8

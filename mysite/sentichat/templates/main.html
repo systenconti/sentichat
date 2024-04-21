@@ -27,7 +27,11 @@
           {% endfor %}
     </div>
     <div class="col text-center message-col">
+        {% if messages %}
         {% block thread %}{% endblock %}
+        {% else %}
+        <p>Choose a conversation first.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

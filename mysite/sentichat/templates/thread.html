@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block thread %}
+<div class="messages">
+    {% for message in messages %}
+    <div>
+        <strong>{{ message.sender.username }}</strong>: {{ message.content }}
+        <br>
+        <small>Sent on: {{ message.timestamp }}</small>
+    </div>
+    {% empty %}
+    <p>No messages in this chatroom yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

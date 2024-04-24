@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd mysite
+
+python manage.py runserver

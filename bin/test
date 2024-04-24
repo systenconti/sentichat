@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd mysite
+
+coverage run --source='.' manage.py test
+
+coverage report

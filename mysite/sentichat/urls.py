@@ -6,4 +6,5 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("chatrooms/<int:chatroom_id>/", views.thread_view, name="thread"),
+    path("send/<int:chatroom_id>/", views.send_message, name="send"),
 ]

@@ -29,7 +29,7 @@ def send_message(request, chatroom_id):
     chatroom = get_object_or_404(ChatRoom, id=chatroom_id)
     if request.method == "POST":
         form = MessageForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and request.user in chatroom.participants.all():
             message = form.save(commit=False)
             message.sender = request.user
             message.save()

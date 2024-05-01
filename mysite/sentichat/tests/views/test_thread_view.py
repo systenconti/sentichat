@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from sentichat.models import ChatRoom, Message
 
 
-class ChatRoomTestCase(TestCase):
+class ThreadViewTestCase(TestCase):
     # Setup test objects
     def setUp(self):
         self.user1 = User.objects.create_user(username="user1", password="password123")
@@ -45,3 +45,48 @@ class ChatRoomTestCase(TestCase):
         self.client.login(username="user1", password="password123")
         response = self.client.get(reverse("thread", args=[999]))
         self.assertEqual(response.status_code, 404)
+
+
+class SendMessageTestCase(TestCase):
+    def setUp(self):
+        # Set up two users and two chat rooms
+        self.user1 = User.objects.create_user(username="user1", password="password123")
+        self.user2 = User.objects.create_user(username="user2", password="password123")
+
+        self.chatroom1 = ChatRoom.objects.create(name="Room 1")
+        self.chatroom1.participants.add(self.user1, self.user2)
+
+        self.chatroom2 = ChatRoom.objects.create(name="Room 2")
+        self.chatroom2.participants.add(self.user2)
+
+        self.client = Client()
+
+    # Test posting a message to a chatroom as a logged-in user
+    def test_post_message(self):
+        self.client.login(username="user1", password="password123")
+        url = reverse("send", args=[self.chatroom1.id])
+        response = self.client.post(url, {"content": "New message in Room 1"})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.chatroom1.messages.count(), 1)
+
+    # Test posting to a chatroom where the user is not a participant
+    def test_post_message_non_participant(self):
+        self.client.login(username="user1", password="password123")
+        url = reverse("send", args=[self.chatroom2.id])
+        response = self.client.post(url, {"content": "Attempt to post in Room 2"})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.chatroom2.messages.count(), 0)
+
+    # Test the form validity within the post
+    def test_post_invalid_form(self):
+        self.client.login(username="user1", password="password123")
+        url = reverse("send", args=[self.chatroom1.id])
+        response = self.client.post(url, {"content": ""})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.chatroom1.messages.count(), 0)
+
+    # Test redirect if not logged in
+    def test_redirect_if_not_logged_in(self):
+        url = reverse("send", args=[self.chatroom1.id])
+        response = self.client.post(url, {"content": "Anonymous message"})
+        self.assertRedirects(response, f"/login/?next=/send/{self.chatroom1.id}/")

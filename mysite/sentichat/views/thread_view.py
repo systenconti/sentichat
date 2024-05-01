@@ -24,6 +24,7 @@ def thread_view(request, chatroom_id):
     return render(request, "thread.html", context=context)
 
 
+@login_required
 def send_message(request, chatroom_id):
     chatroom = get_object_or_404(ChatRoom, id=chatroom_id)
     if request.method == "POST":
